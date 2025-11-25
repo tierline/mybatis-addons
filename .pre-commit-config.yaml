@@ -1,0 +1,76 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: trailing-whitespace
+        exclude: \.md$
+      - id: end-of-file-fixer
+      - id: check-yaml
+      - id: check-added-large-files
+      - id: check-merge-conflict
+      - id: check-case-conflict
+      - id: mixed-line-ending
+        args: ['--fix=lf']
+
+  # Markdown linting
+  - repo: https://github.com/DavidAnson/markdownlint-cli2
+    rev: v0.16.0
+    hooks:
+      - id: markdownlint-cli2
+        name: Markdown Lint
+
+  # Gradle Spotless for Java code formatting
+  - repo: local
+    hooks:
+      - id: spotless-apply
+        name: Spotless Apply
+        entry: ./gradlew spotlessApply
+        language: system
+        files: \.java$
+        pass_filenames: false
+        require_serial: true
+
+      - id: spotless-check
+        name: Spotless Check
+        entry: ./gradlew spotlessCheck
+        language: system
+        files: \.java$
+        pass_filenames: false
+        require_serial: true
+
+  # Checkstyle for Java code quality
+  - repo: local
+    hooks:
+      - id: checkstyle
+        name: Checkstyle
+        entry: ./gradlew checkstyleMain
+        language: system
+        files: \.java$
+        pass_filenames: false
+        require_serial: true
+
+  # SpotBugs for static analysis
+  - repo: local
+    hooks:
+      - id: spotbugs
+        name: SpotBugs
+        entry: ./gradlew spotbugsMain
+        language: system
+        files: \.java$
+        pass_filenames: false
+        require_serial: true
+        stages: [manual]  # Run only when explicitly requested
+
+  # PMD for code quality
+  - repo: local
+    hooks:
+      - id: pmd
+        name: PMD
+        entry: ./gradlew pmdMain
+        language: system
+        files: \.java$
+        pass_filenames: false
+        require_serial: true
+        stages: [manual]  # Run only when explicitly requested
