@@ -20,15 +20,15 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-/** Test class for {@link OptionalLocalDateTypeHandler}. */
-@DisplayName("OptionalLocalDateTypeHandler のテスト")
-class OptionalLocalDateTypeHandlerTest {
+/** Test class for {@link OptionalDateTypeHandler}. */
+@DisplayName("OptionalDateTypeHandler のテスト")
+class OptionalDateTypeHandlerTest {
 
-  private OptionalLocalDateTypeHandler handler;
+  private OptionalDateTypeHandler handler;
 
   @BeforeEach
   void setUp() {
-    handler = new OptionalLocalDateTypeHandler();
+    handler = new OptionalDateTypeHandler();
   }
 
   @Test

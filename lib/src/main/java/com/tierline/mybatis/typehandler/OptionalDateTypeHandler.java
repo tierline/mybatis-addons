@@ -12,7 +12,7 @@ import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
 
 /** MyBatis type handler for {@link Optional} of {@link LocalDate}. */
-public class OptionalLocalDateTypeHandler extends BaseTypeHandler<Optional<LocalDate>> {
+public class OptionalDateTypeHandler extends BaseTypeHandler<Optional<LocalDate>> {
 
   @Override
   public void setNonNullParameter(
