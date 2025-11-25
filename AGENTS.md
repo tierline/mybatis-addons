@@ -85,9 +85,38 @@ Tierline MyBatis Addons は、MyBatis で Java の `Optional` 型を扱うため
 - 新機能には必ず対応するテストを追加
 - コミット前に `./gradlew check` を実行してすべてのテストがパスすることを確認
 
-### 現状
+### テスト作成の方針
 
-注意: `lib/src/test/` ディレクトリは現在空です。テストを追加する際は、適切なパッケージ構造の下に作成してください。
+#### テストクラスの命名
+
+- テスト対象クラス名 + `Test` (例: `OptionalLocalDateTypeHandlerTest`)
+
+#### @DisplayName の使用
+
+- クラスレベルとメソッドレベルの両方で使用
+- 日本語で仕様を明確に記述
+- 例:
+
+  ```java
+  @DisplayName("OptionalLocalDateTypeHandler のテスト")
+  class OptionalLocalDateTypeHandlerTest {
+    @Test
+    @DisplayName("Optional に値がある場合、PreparedStatement に java.sql.Date として設定される")
+    void testSetNonNullParameterWithPresentValue() { ... }
+  }
+  ```
+
+#### テストコードのスタイル
+
+- Given/When/Then などのコメントは不要（@DisplayName で仕様が明確なため）
+- モックは Mockito を使用
+- アサーションは JUnit の標準アサーションメソッドを使用
+
+#### モックの設定
+
+- Mockito 5.x を使用
+- `mockito-extensions/org.mockito.plugins.MockMaker` で `mock-maker-inline` を有効化
+- これにより final クラス（JDBC インターフェースなど）もモック可能
 
 ## 品質チェック
 
