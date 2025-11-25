@@ -22,7 +22,7 @@ public class OptionalTypeHandler<T> extends BaseTypeHandler<Optional<T>> {
   }
 
   /** ジェネリクスの型パラメータの型を取得するためのメソッド. */
-  public void init(T... t) {
+  public final void init(T... t) {
     @SuppressWarnings("unchecked")
     Class<T> type = (Class<T>) t.getClass().getComponentType();
     this.type = type;
@@ -37,8 +37,9 @@ public class OptionalTypeHandler<T> extends BaseTypeHandler<Optional<T>> {
       case OffsetDateTime odt -> ps.setTimestamp(i, Timestamp.from(odt.toInstant()));
       case String s -> ps.setString(i, s);
       case null -> setNull(ps, i, jdbcType);
-      default -> throw new UnsupportedOperationException(
-          "Unsupported type: " + value.getClass().getName());
+      default ->
+        throw new UnsupportedOperationException(
+            "Unsupported type: " + value.getClass().getName());
     }
   }
 
