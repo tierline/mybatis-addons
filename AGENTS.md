@@ -89,7 +89,7 @@ Tierline MyBatis Addons は、MyBatis で Java の `Optional` 型を扱うため
 
 #### テストクラスの命名
 
-- テスト対象クラス名 + `Test` (例: `OptionalLocalDateTypeHandlerTest`)
+- テスト対象クラス名 + `Test` (例: `OptionalDateTypeHandlerTest`)
 
 #### @DisplayName の使用
 
@@ -98,8 +98,8 @@ Tierline MyBatis Addons は、MyBatis で Java の `Optional` 型を扱うため
 - 例:
 
   ```java
-  @DisplayName("OptionalLocalDateTypeHandler のテスト")
-  class OptionalLocalDateTypeHandlerTest {
+  @DisplayName("OptionalDateTypeHandler のテスト")
+  class OptionalDateTypeHandlerTest {
     @Test
     @DisplayName("Optional に値がある場合、PreparedStatement に java.sql.Date として設定される")
     void testSetNonNullParameterWithPresentValue() { ... }
