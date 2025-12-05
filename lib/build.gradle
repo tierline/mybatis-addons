@@ -20,7 +20,7 @@ plugins {
 }
 
 group = 'com.tierline'
-version = '0.0.2'
+version = '0.0.3'
 
 jar {
   archiveBaseName = rootProject.name
@@ -96,6 +96,8 @@ dependencies {
     // Test dependencies
     testImplementation 'org.mockito:mockito-core:5.20.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.20.0'
+    testImplementation 'org.postgresql:postgresql:42.7.4'
+    testImplementation 'org.slf4j:slf4j-simple:1.7.36'
 }
 
 testing {
@@ -108,9 +110,36 @@ testing {
     }
 }
 
+// Configure test output
+tasks.named('test') {
+    testLogging {
+        events "passed", "skipped", "failed"
+        exceptionFormat "full"
+        showExceptions true
+        showCauses true
+        showStackTraces true
+
+        // Show test names as they execute
+        afterSuite { desc, result ->
+            if (!desc.parent) { // Will match the outermost suite
+                println "\nTest Results: ${result.resultType}"
+                println "Tests: ${result.testCount}, " +
+                        "Passed: ${result.successfulTestCount}, " +
+                        "Failed: ${result.failedTestCount}, " +
+                        "Skipped: ${result.skippedTestCount}"
+            }
+        }
+    }
+}
+
 // Apply a specific Java toolchain to ease working on different environments.
 java {
     toolchain {
         languageVersion = JavaLanguageVersion.of(25)
     }
+}
+
+// Configure Java compiler options
+tasks.withType(JavaCompile).configureEach {
+    options.compilerArgs += ['-Xlint:unchecked', '-Xlint:deprecation']
 }

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.tierline.mybatis.integration.TestEntityMapper">
+
+  <resultMap id="testEntityResultMap" type="com.tierline.mybatis.integration.TestEntity">
+    <id property="id" column="id" />
+    <result property="name" column="name"
+            javaType="java.util.Optional"
+            jdbcType="VARCHAR"
+            typeHandler="com.tierline.mybatis.typehandler.OptionalTypeHandler"/>
+    <result property="age" column="age"
+            javaType="java.util.Optional"
+            jdbcType="INTEGER"
+            typeHandler="com.tierline.mybatis.typehandler.OptionalTypeHandler"/>
+    <result property="salary" column="salary"
+            javaType="java.util.Optional"
+            jdbcType="BIGINT"
+            typeHandler="com.tierline.mybatis.typehandler.OptionalTypeHandler"/>
+    <result property="rate" column="rate"
+            javaType="java.util.Optional"
+            jdbcType="DOUBLE"
+            typeHandler="com.tierline.mybatis.typehandler.OptionalTypeHandler"/>
+    <result property="amount" column="amount"
+            javaType="java.util.Optional"
+            jdbcType="NUMERIC"
+            typeHandler="com.tierline.mybatis.typehandler.OptionalTypeHandler"/>
+    <result property="active" column="active"
+            javaType="java.util.Optional"
+            jdbcType="BIT"
+            typeHandler="com.tierline.mybatis.typehandler.OptionalTypeHandler"/>
+    <result property="birthDate" column="birth_date"
+            javaType="java.util.Optional"
+            jdbcType="DATE"
+            typeHandler="com.tierline.mybatis.typehandler.OptionalDateTypeHandler"/>
+    <result property="createdAt" column="created_at"
+            javaType="java.util.Optional"
+            jdbcType="TIMESTAMP"
+            typeHandler="com.tierline.mybatis.typehandler.OptionalTimestampTypeHandler"/>
+  </resultMap>
+
+  <insert id="insert" parameterType="com.tierline.mybatis.integration.TestEntity">
+    INSERT INTO test_entity (id, name, age, salary, rate, amount, active, birth_date, created_at)
+    VALUES (
+      #{id},
+      #{name, javaType=java.util.Optional, jdbcType=VARCHAR, typeHandler=com.tierline.mybatis.typehandler.OptionalTypeHandler},
+      #{age, javaType=java.util.Optional, jdbcType=INTEGER, typeHandler=com.tierline.mybatis.typehandler.OptionalTypeHandler},
+      #{salary, javaType=java.util.Optional, jdbcType=BIGINT, typeHandler=com.tierline.mybatis.typehandler.OptionalTypeHandler},
+      #{rate, javaType=java.util.Optional, jdbcType=DOUBLE, typeHandler=com.tierline.mybatis.typehandler.OptionalTypeHandler},
+      #{amount, javaType=java.util.Optional, jdbcType=NUMERIC, typeHandler=com.tierline.mybatis.typehandler.OptionalTypeHandler},
+      #{active, javaType=java.util.Optional, jdbcType=BIT, typeHandler=com.tierline.mybatis.typehandler.OptionalTypeHandler},
+      #{birthDate, javaType=java.util.Optional, jdbcType=DATE, typeHandler=com.tierline.mybatis.typehandler.OptionalDateTypeHandler},
+      #{createdAt, javaType=java.util.Optional, jdbcType=TIMESTAMP, typeHandler=com.tierline.mybatis.typehandler.OptionalTimestampTypeHandler}
+    )
+  </insert>
+
+  <select id="findById" resultMap="testEntityResultMap">
+    SELECT * FROM test_entity WHERE id = #{id}
+  </select>
+
+</mapper>
