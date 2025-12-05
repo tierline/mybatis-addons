@@ -1,5 +1,6 @@
 package com.tierline.mybatis.typehandler;
 
+import java.math.BigDecimal;
 import java.sql.CallableStatement;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -22,8 +23,8 @@ public class OptionalTypeHandler<T> extends BaseTypeHandler<Optional<T>> {
   }
 
   /** ジェネリクスの型パラメータの型を取得するためのメソッド. */
+  @SuppressWarnings("unchecked")
   public final void init(T... t) {
-    @SuppressWarnings("unchecked")
     Class<T> type = (Class<T>) t.getClass().getComponentType();
     this.type = type;
   }
@@ -34,8 +35,13 @@ public class OptionalTypeHandler<T> extends BaseTypeHandler<Optional<T>> {
     // ジェネリクスのままではパターンマッチできないので値を取得
     T value = parameter.orElse(null);
     switch (value) {
-      case OffsetDateTime odt -> ps.setTimestamp(i, Timestamp.from(odt.toInstant()));
       case String s -> ps.setString(i, s);
+      case Integer intVal -> ps.setInt(i, intVal);
+      case Boolean boolVal -> ps.setBoolean(i, boolVal);
+      case BigDecimal bd -> ps.setBigDecimal(i, bd);
+      case OffsetDateTime odt -> ps.setTimestamp(i, Timestamp.from(odt.toInstant()));
+      case Long longVal -> ps.setLong(i, longVal);
+      case Double doubleVal -> ps.setDouble(i, doubleVal);
       case null -> setNull(ps, i, jdbcType);
       default ->
         throw new UnsupportedOperationException(
@@ -49,9 +55,12 @@ public class OptionalTypeHandler<T> extends BaseTypeHandler<Optional<T>> {
       case JdbcType.BIT -> ps.setNull(i, Types.BIT);
       case JdbcType.CHAR -> ps.setNull(i, Types.CHAR);
       case JdbcType.DATE -> ps.setNull(i, Types.DATE);
+      case JdbcType.DECIMAL -> ps.setNull(i, Types.DECIMAL);
+      case JdbcType.DOUBLE -> ps.setNull(i, Types.DOUBLE);
       case JdbcType.INTEGER -> ps.setNull(i, Types.INTEGER);
       case JdbcType.NUMERIC -> ps.setNull(i, Types.NUMERIC);
       case JdbcType.OTHER -> ps.setNull(i, Types.OTHER);
+      case JdbcType.REAL -> ps.setNull(i, Types.REAL);
       case JdbcType.SMALLINT -> ps.setNull(i, Types.SMALLINT);
       case JdbcType.TIMESTAMP -> ps.setNull(i, Types.TIMESTAMP);
       case JdbcType.TIMESTAMP_WITH_TIMEZONE -> ps.setNull(i, Types.TIMESTAMP_WITH_TIMEZONE);
@@ -62,16 +71,28 @@ public class OptionalTypeHandler<T> extends BaseTypeHandler<Optional<T>> {
 
   @Override
   public Optional<T> getNullableResult(ResultSet rs, String columnName) throws SQLException {
-    return Optional.of(rs.getObject(columnName, this.type));
+    Object value = rs.getObject(columnName);
+    if (value == null || rs.wasNull()) {
+      return Optional.empty();
+    }
+    return Optional.of(this.type.cast(value));
   }
 
   @Override
   public Optional<T> getNullableResult(ResultSet rs, int columnIndex) throws SQLException {
-    return Optional.of(rs.getObject(columnIndex, this.type));
+    Object value = rs.getObject(columnIndex);
+    if (value == null || rs.wasNull()) {
+      return Optional.empty();
+    }
+    return Optional.of(this.type.cast(value));
   }
 
   @Override
   public Optional<T> getNullableResult(CallableStatement cs, int columnIndex) throws SQLException {
-    return Optional.of(cs.getObject(columnIndex, this.type));
+    Object value = cs.getObject(columnIndex);
+    if (value == null || cs.wasNull()) {
+      return Optional.empty();
+    }
+    return Optional.of(this.type.cast(value));
   }
 }
